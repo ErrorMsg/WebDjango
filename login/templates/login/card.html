@@ -1,0 +1,32 @@
+{% extends "login/cb.html" %}
+{% load staticfiles %}
+
+{% block header %}
+锦囊牌：将计就计
+{% endblock %}
+
+{% block content %}
+<h1></h1>
+<div class="container">
+	<div class="row">
+		<div class="col-sm-5">
+			<div class="main-photo">
+				<img src="{% static 'login/images/n504.jpg' %}" alt="" width="384" height="538">
+			</div>
+		</div>
+		<div class="col-sm-7 pull-left">
+			<h2>将计就计</h2>
+			<p>类型：非延时锦囊/诡计</p>
+			<p>效果：其他角色在你的回合内发动伏击时，无效之。</p>
+			<p>伏击效果：对你使用，当前回合，每当你使用伏击区的牌时，摸一张牌。</p>
+		</div>
+	</div>
+</div>
+<nav aria-label="...">
+	<ul class="pager">
+		<li><a href="{% url 'login:card' %}">prev</a></li>
+		<li>{{ id }}</li>
+		<li><a href="{% url 'login:card' %}">next</a></li>
+	</ul>
+</nav>
+{% endblock %}

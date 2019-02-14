@@ -21,3 +21,14 @@
     color: #ccc;
     font-family: 'Roboto', sans-serif;
 }
+
+.col-center-block {
+	float: none;
+	display: table;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.main-photo {
+	margin-left: 20px;
+}

@@ -30,3 +30,7 @@ def test(request):
 def love(request):
     pass
     return render(request, "login/love.html")
+	
+def card(request, id=1):
+	pass
+	return render(request, "login/card.html", {'id':id})
