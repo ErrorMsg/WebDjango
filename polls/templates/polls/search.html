@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<title>{% block title %}Search_index{% endblock %}</title>
+{% load static %}
+<link rel="stylesheet" type="text/ccs" href="{% static 'polls/style.ccs' %}">
+</head>
+<body>
+	<form action={% block action %}"/poll/search"{% endblock %} method="get">
+		<input type="text" name="q">
+		<input type="submit" value="search">
+	</form>
+
+	<form action="/poll/search-post/" method="post">
+		{% csrf_token %}
+		<input type="text" name="q">
+		<input type="submit" value="submit">
+	</form>
+	<p>{{ rlt }}</p>
+</body>
+</html>

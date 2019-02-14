@@ -1,0 +1,51 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Title{% endblock %}</title>
+    <link href="{% static 'login/bootstrap-3.3.7-dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    {% block css %}{% endblock %}
+</head>
+
+<body>
+<p><a href={% url "login:index" %}>index</a> - <a href={% url "login:login" %}>login</a> - <a href={% url "login:register" %}>register</a></p>
+
+{% block navbar %}
+<ul class="nav nav-pills nav-right">
+{% block active %}
+  <li role="presentation" class="active"><a href={% url "login:index" %}>Home</a></li>
+  <li role="presentation"><a href={% url "login:login" %}>Login</a></li>
+  <li role="presentation"><a href={% url "login:register" %}>Register</a></li>
+  <li role="presentation"class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+        Help<span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu">
+        <li><a href="#">test1</a></li>
+        <li><a href="#">test2</a></li>
+    </ul>
+  </li>
+{% endblock %}
+</ul>
+{% endblock %}
+
+<div class="page-header">
+  <h1>{% block header %}header <small>header</small>{% endblock %}</h1>
+</div>
+
+{% block content %}
+<div class="jumbotron">
+    <script src="{% static 'login/js/jquery-3.3.1.js' %}"></script>
+    <script src="{% static 'login/bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+  <h1>Hello, world!</h1>
+  <p>{% block body %}...{% endblock %}</p>
+  <p><a class="btn btn-primary btn-lg" href={% url "login:index" %} role="button">Learn more</a></p>
+</div>
+{% endblock %}
+</body>
+
+</html>

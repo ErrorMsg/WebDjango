@@ -1,0 +1,142 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Title{% endblock %}</title>
+    <link href="{% static 'login/bootstrap-3.3.7-dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'login/css/main.css' %}" rel="stylesheet">
+    {% block css %}{% endblock %}
+</head>
+
+<body>
+<header>
+<div class="header_top">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="contactinfo">
+                    <ul class="nav nav-pills">
+                        <li><a href="#"><i class="fa fa-phone"></i>Contacts: 18551208263</a></li><!-- i = icon -->
+                        <li><a href="#"><i class="fa fa-envelope"></i>gujingsu@cn.ibm.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="menu pull-right">
+                    <ul class="nav nav-pills">
+                        <li><a href={% url "login:index" %}>index</a></li>
+                        <li><a href={% url "login:login" %}>login</a></li>
+                        <li><a href={% url "login:register" %}>register</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block navbar %}
+ <div class="header-middle">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <a id="logo" href="#" class="logo" onclick="ToLove()"><img src="{% static 'login/images/love.gif' %}" alt="" width="42" height="42"></a>
+            </div>
+            <div class="col-sm-8">
+                <ul class="nav nav-pills pull-right">
+                    <li role="presentation" class="active"><a href="{% url 'login:index' %}">主页</a></li>
+                    <li role="presentation"><a href="{% url 'login:login' %}">日志</a></li>
+                    <li role="presentation" class="dropdown">
+                        <a id="menu-select" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            三国杀 <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li role="presentation"><a href="{% url 'login:register' %}">test1</a></li>
+                            <li role="presentation"><a href="{% url 'login:register' %}">test2</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+ </div>
+
+{% endblock %}
+</header>
+<!--<div class="header-middle">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-4">
+						<div class="logo pull-left">
+							<a href="index.html"><span>E</span>-Shop</a>
+						</div>
+						<div class="btn-group pull-right">
+							<div class="btn-group">
+								<button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
+									USA
+									<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li><a href="#">Canada</a></li>
+									<li><a href="#">UK</a></li>
+								</ul>
+							</div>
+
+							<div class="btn-group">
+								<button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
+									DOLLAR
+									<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li><a href="#">Canadian Dollar</a></li>
+									<li><a href="#">Pound</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-8">
+						<div class="shop-menu pull-right">
+							<ul class="nav navbar-nav">
+								<li><a href="#"><i class="fa fa-user"></i> Account</a></li>
+								<li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li>
+								<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
+								<li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Cart</a></li>
+								<li><a href="login.html"><i class="fa fa-lock"></i> Login</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>-->
+
+<div class="page-header" align="center">
+  <h1>{% block header %}header <small>header</small>{% endblock %}</h1>
+</div>
+
+{% block content %}
+<div class="jumbotron" align="center">
+    <script src="{% static 'login/js/jquery-3.3.1.js' %}"></script>
+    <script src="{% static 'login/bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'login/js/constant.js' %}"></script>
+  <h1>Hello, world!</h1>
+  <p>{% block body %}...{% endblock %}</p>
+  <p><a class="btn btn-primary btn-lg" href={% url "login:index" %} role="button">Learn more</a></p>
+  <script>
+      var c = getCount()
+      function ToLove() {
+          c=c+1
+          if (c==3)
+          {
+              document.getElementById('logo').href="{% url 'login:love' %}";
+              document.getElementById('logo').target="_blank";  //change link when click=18, keep click will open in new page
+          }
+      }
+  </script>
+</div>
+{% endblock %}
+</body>
+
+</html>

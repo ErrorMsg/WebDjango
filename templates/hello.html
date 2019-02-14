@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body style="background-color: whitesmoke">
+    <h1 style="background-color :antiquewhite;color: black">Hello World {{ name }}</h1>
+    <h1>show</h1>
+        <table border="1">
+            <thead>
+                <tr>user&</tr>
+                <tr>password</tr>
+            </thead>
+            <tbody>
+                {% for i in data %}
+                <tr>
+                    <td>{{ i.user }}</td>
+                    <td>{{ i.pwd }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{% extends 'login/base.html' %}
+{% load staticfiles %}
+
+{% block title %}login{% endblock %}
+
+{% block header %}Login Page{% endblock %}
+
+{% block active %}
+  <li role="presentation"><a href={% url "login:index" %}>Home</a></li>
+  <li role="presentation" class="active"><a href={% url "login:login" %}>Login</a></li>
+  <li role="presentation"><a href={% url "login:register" %}>Register</a></li>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="col-md-4 col-md-offset-4">
+            <form class="form-login" action="login:login" method="post">
+                <h2 class="text-center">Welcome!</h2>
+                <div class="form-group">
+                    <label for="id_username">Username: </label>
+                    <input type="text" name="username" class="form-control" id="id_username" placeholder="Username" autofocus required>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
