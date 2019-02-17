@@ -24,6 +24,7 @@ urlpatterns = [
 	#ld/dj15
 	url(r'^$', view.hello),
 	path("index/", view.index),
+	path("k/", include('cards.urls')),
 	path("p/", include('polls.urls')),
 	path("u/", include('login.urls')),
 ]

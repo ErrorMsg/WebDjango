@@ -1,0 +1,70 @@
+{% extends "cards/cb.html" %}
+{% load staticfiles %}
+
+{% block header %}
+锦囊牌：将计就计
+{% endblock %}
+
+{% block content %}
+<h1></h1>
+<div class="container">
+	<div class="row">
+		<div class="col-sm-5">
+			<div class="main-photo">
+				<img src="{% static 'login/images/n504.jpg' %}" alt="" width="384" height="538">
+			</div>
+		</div>
+		<div class="col-sm-7 pull-left">
+			<h2>将计就计</h2>
+			<p>类型：非延时锦囊/诡计</p>
+			<p>效果：其他角色在你的回合内发动伏击时，无效之。</p>
+			<p>伏击效果：对你使用，当前回合，每当你使用伏击区的牌时，摸一张牌。</p>
+			<hr />
+			<dl>
+				<dt class="text-left">AA</dt>
+				<dd class="text-left">aaa,aaa,aaa</dd>
+				<dt class="text-right">BB</dt>
+				<dd class="text-right">bbb,bbb,bbb</dd>
+				<dt class="text-left">CC</dt>
+				<dd class="text-left">ccc,ccc,ccc</dd>
+				{% if name %}
+					<dt class="text-right">{{ name }}</dt>
+					<dd class="text-right">{{ comment }}</dd>
+				{% endif %}
+				{% if uc %}
+					{% for c in uc %}
+						{% if forloop.counter0|divisibleby:"2" %}
+							<dt class="text-left">{{ c.user.name }}   {{ c.pub_time }}</dt>
+							<dd class="text-left">{{ c.entry }}</dd>
+						{% else %}
+							<dt class="text-right">{{ c.user.name }}   {{ c.pub_time }}</dt>
+							<dd class="text-right">{{ c.entry }}</dd>
+						{% endif %}
+					{% endfor %}
+					<!--<dt class="text-right">{{ uc.user.name }}</dt>
+					<dd class="text-right">{{ uc.entry }}</dd>-->
+				{% else %}
+					<dt class="text-center">----------</dt>
+				{% endif %}
+			</dl>
+			&nbsp; <!--space line-->
+			<form class="comment-form" action="{% url 'cards:card' %}" method="post">
+				{% csrf_token %}
+				<div class="input-group">
+					<input type="text" name="comment" class="form-control" placeholder="write a comment here">
+					<span class="input-group-btn">
+						<button type="submit" class="btn btn-default">Comment</button>
+					</span>
+				</div>
+			</form>	
+		</div>
+	</div>
+</div>
+<nav aria-label="...">
+	<ul class="pager">
+		<li><a href="{% url 'cards:card' %}">prev</a></li>
+		<li>{{ id }}</li>
+		<li><a href="{% url 'cards:card' %}">next</a></li>
+	</ul>
+</nav>
+{% endblock %}

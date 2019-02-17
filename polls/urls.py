@@ -16,4 +16,6 @@ urlpatterns = [
     #path('post/<int:pk>', views.xxx, name='xxx'),
     #url(r'^article/(?P<year>[0-9]{4})/$', view.xxx),
     #path('article/<int:year>/', views.xxx),
+	
+	path("chatroom/<int:n>", views.chatroom, name="chatroom"),
 ]

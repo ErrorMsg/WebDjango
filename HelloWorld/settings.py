@@ -37,9 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "polls",
+	#'django_comments',
+	"blogs",
     "cards",
     "login",
+	"polls",
+	"users",
+	
 ]
 
 MIDDLEWARE = [
@@ -61,6 +65,7 @@ TEMPLATES = [
             os.path.join(BASE_DIR, "polls", "templates"),
             os.path.join(BASE_DIR, "templates"),
             os.path.join(BASE_DIR, "login", "templates"),
+			os.path.join(BASE_DIR, "cards", "templates"),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
