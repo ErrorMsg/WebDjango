@@ -1,0 +1,116 @@
+{% extends 'login/cb.html' %}
+
+{% block title %}index{% endblock %}
+
+<!--
+	<div class="container">
+		{% if request.session.is_login %}
+			<div class="col-sm-4 col-sm-offset-4">
+				<form class="form-reset" action="{% url 'login:reset' %}" method="post">
+				{% if warning %}
+					<div class="alert alert-warning">{{ warning }}</div>
+				{% endif %}
+				{% csrf_token %}
+					<h2 class="text-center">Change your password</h2>
+					<div class="form-group">
+						{{ reset_form.password0.label_tag }}
+						{{ reset_form.password0 }}
+					</div>
+					<div class="form-group">
+						{{ reset_form.password1.label_tag }}
+						{{ reset_form.password1 }}
+					</div>
+					<div class="form-group">
+						{{ reset_form.password2.label_tag }}
+						{{ reset_form.password2 }}
+					</div>
+					<button type="reset" class="btn btn-default pull-left">Clear</button>
+					<button type="submit" class="btn btn-default pull-right">Change</button>
+				</form>
+			</div>
+		{% else %}
+			<div class="col-sm-4 col-sm-offset-4>
+				<form class="form-auth" action="#" method="post">
+				{% if warning %}
+					<div class="alert alert-warning">{{ warning }}</div>
+				{% endif %}
+				{% csrf_token %}
+					<h2 class="text-center">Change your password</h2>
+				{% if not request.session.is_auth %}
+					<div class="form-group">
+						{{ auth_form.username.label_tag }}
+						{{ auth_form.username }}
+					</div>
+					<div class="form-group">
+						{{ auth_form.email.label_tag }}
+						{{ auth_form.email }}
+					</div>
+				{% else %}
+					<div class="form-group">
+						{{ reset_form.password0.label_tag }}
+						{{ reset_form.password0 }}
+					</div>
+					<div class="form-group">
+						{{ reset_form.password1.label_tag }}
+						{{ reset_form.password1 }}
+					</div>
+					<div class="form-group">
+						{{ reset_form.password2.label_tag }}
+						{{ reset_form.password2 }}
+					</div>
+				{% endif %}
+				</form>
+			</div>
+		{% endif %}
+	</div>
+-->
+
+{% block content %}
+	<div class="container">
+		{% if request.session.is_auth or request.session.is_login %}
+			<div class="col-sm-4 col-sm-offset-4">
+				<form class="form-reset" action="{% url 'login:reset' %}" method="post">
+				{% if warning %}
+					<div class="alert alert-warning">{{ warning }}</div>
+				{% endif %}
+				{% csrf_token %}
+					<h2 class="text-center">Change your password</h2>
+					<div class="form-group">
+						{{ reset_form.password0.label_tag }}
+						{{ reset_form.password0 }}
+					</div>
+					<div class="form-group">
+						{{ reset_form.password1.label_tag }}
+						{{ reset_form.password1 }}
+					</div>
+					<div class="form-group">
+						{{ reset_form.password2.label_tag }}
+						{{ reset_form.password2 }}
+					</div>
+					<button type="reset" class="btn btn-default pull-left">Clear</button>
+					<button type="submit" class="btn btn-default pull-right">Change</button>
+				</form>
+			</div>
+		{% else %}
+			<div class="col-sm-4 col-sm-offset-4">
+				<form class="form-auth" action="{% url 'login:reset' %}" method="post">
+				{% if warning %}
+					<div class="alert alert-warning">{{ warning }}</div>
+				{% endif %}
+				{% csrf_token %}
+					<h2 class="text-center">Authenticate yourself</h2>
+					<div class="form-group">
+						{{ auth_form.username.label_tag }}
+						{{ auth_form.username }}
+					</div>
+					<div class="form-group">
+						{{ auth_form.email.label_tag }}
+						{{ auth_form.email }}
+					</div>
+					<button type="reset" class="btn btn-default pull-left">Clear</button>
+					<button type="submit" class="btn btn-default pull-right">Authenticate</button>
+				</form>
+			</div>
+		{% endif %}
+	</div>
+{% endblock %}

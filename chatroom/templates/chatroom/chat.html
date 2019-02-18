@@ -18,7 +18,7 @@
 			<div class="col-sm-6">
 				<div class="contactinfo">
 					<ul class="nav nav-pills">
-						<li><a href="#">thanks for using chatroom</a></li>
+						<li><a href="#">Thanks for join chatroom {{ id }}</a></li>
 					</ul>
 				</div>
 			</div>
@@ -33,7 +33,11 @@
 		</div>
 		<div class="row">
 			<div class="col-sm-4 col-sm-offset-4">
-				<h1>#Header</h1>
+			{% if topic %}
+				<h1>#{{ topic }}</h1>
+			{% else %}
+				<h1>#Room{{ id }}</h1>
+			{% endif %}
 			</div>
 		</div>
 	</div>
@@ -42,19 +46,27 @@
 <body>
 	<div class="container">
 		<div class="row">
+			{% if chats %}
 			<div class="col-sm-4 col-sm-offset-4">
 				<dl>
-				{% if msgs %}
-					{% for msg in msgs %}
+					{% for chat in chats %}
 						{% if forloop.counter|divisibleby:"2" %}
-							<dt class="text-left">{{ msg.from }}</dt>
-							<dd class="text-left">{{ msg.m }}</dd>
+							<dt class="text-left">{{ chat.user.name }}   {{ chat.said_time }}</dt>
+							<dd class="text-left">{{ chat.said }}</dd>
 						{% else %}
-							<dt class="text-right">{{ msg.from }}</dt>
-							<dd class="text-right">{{ msg.m }}</dd>
+							<dt class="text-right">{{ chat.user.name }}   {{ chat.said_time }}</dt>
+							<dd class="text-right">{{ chat.said }}</dd>
 						{% endif %}
 					{% endfor %}
-				{% endif %}
+				</dl>
+			</div>
+			{% endif %}
+				
+			<div class="col-sm-8 col-sm-offset-2">
+				<dl>
+					<dt class="text-left">Room{{ id }}:</dt>
+					<dd class="text-left">Start your chat now.</dd>
+					<hr />
 				</dl>
 			</div>
 		</div>

@@ -74,6 +74,3 @@ def vote(request, question_id):
 def test(request, p):
     return HttpResponse("test path is: %s" % p)
 
-def chatroom(request, n=1):
-	pass
-	return HttpResponse("you are in chatroom %d now." % n)

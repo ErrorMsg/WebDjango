@@ -1,0 +1,88 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Title{% endblock %}</title>
+    <link href="{% static 'login/bootstrap-3.3.7-dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'login/css/main.css' %}" rel="stylesheet">
+    {% block css %}{% endblock %}
+</head>
+
+<head>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="contactinfo">
+					<ul class="nav nav-pills">
+						<li><a href="#">Thanks for join chatroom {{ id }}</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="menu pull-right">
+					<ul class="nav nav-pills">
+						<li><a href="#">name</a></li>
+						<li><a href="#">logoff</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-4 col-sm-offset-4">
+			{% if topic %}
+				<h1>#{{ topic }}</h1>
+			{% else %}
+				<h1>#Room{{ id }}</h1>
+			{% endif %}
+			</div>
+		</div>
+	</div>
+</head>
+<hr />
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-8 col-sm-offset-2">
+				<form class="room-form" action="{% url 'chatroom:test' id %}" method="post">
+				{% csrf_token %}
+					<div class="input-group">
+						<input type="text" name="roomtopic" class="form-control" placeholder="add a topic">
+						<span class="input-group-btn">
+							<button type="submit" class="btn btn-default">Create/Join</button>
+						</span>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-4 col-sm-offset-4">
+				<dl>
+				{% if msgs %}
+					{% for msg in msgs %}
+						{% if forloop.counter|divisibleby:"2" %}
+							<dt class="text-left">{{ msg.from }}</dt>
+							<dd class="text-left">{{ msg.m }}</dd>
+						{% else %}
+							<dt class="text-right">{{ msg.from }}</dt>
+							<dd class="text-right">{{ msg.m }}</dd>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+				</dl>
+			</div>
+			<div class="col-sm-8 col-sm-offset-2">
+				<dl>
+					<dt class="text-left">Room{{ id }}:</dt>
+					<dd class="text-left">Start your chat now.</dd>
+					<hr />
+				</dl>
+			</div>
+		</div>
+	</div>
+</body>

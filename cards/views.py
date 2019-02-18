@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from users.models import UserInfo
 from blogs.models import Blog, UserComments
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import datetime
 
 # Create your views here.
@@ -28,5 +29,12 @@ def card(request, id=1):
 		except:
 			c.save()
 			comments = UserComments.objects.order_by("pub_time")
+			paginator = Paginator(comments, 4)
+			try:
+				comments = paginator.page(page_num)
+			except PageNotAnInteger:
+				comments = paginator.page(1)
+			except EmptyPage:
+				comments = paginator.page(paginator.num_pages)
 			return render(request, "cards/card.html", {'id':id, 'uc':comments})
 	return render(request, "cards/card.html", {'id':id, 'uc':comments})

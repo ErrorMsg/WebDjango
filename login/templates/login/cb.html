@@ -29,9 +29,15 @@
             <div class="col-sm-6">
                 <div class="menu pull-right">
                     <ul class="nav nav-pills">
-                        <li><a href={% url "login:index" %}>index</a></li>
-                        <li><a href={% url "login:login" %}>login</a></li>
-                        <li><a href={% url "login:register" %}>register</a></li>
+					{% if request.session.is_login %}
+						<li><a href="#">Welcome back, {{ request.session.user_name }}</a></li>
+						<li><a href="{% url 'login:index' %}">index</a></li>
+						<li><a href="{% url 'login:logout' %}">logout</a></li>
+					{% else %}
+                        <li><a href="{% url 'login:index' %}">index</a></li>
+                        <li><a href="{% url 'login:login' %}">login</a></li>
+                        <li><a href="{% url 'login:register' %}">register</a></li>
+					{% endif %}
                     </ul>
                 </div>
             </div>

@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Blog(models.Model):
-	topic = models.CharField(max_length=64)
+	topic = models.CharField(max_length=64, unique=True)
 	ct_time = models.DateTimeField(auto_now_add=True)
 	
 	def __str__(self):
