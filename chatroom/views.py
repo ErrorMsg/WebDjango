@@ -6,8 +6,8 @@ from .models import Room, Chats
 # Create your views here.
 def test(request, n=1):
 	if request.method == "POST":
-		topic = request.POST.get('roomtopic')
-		return render(request, "chatroom/test.html", {'id':n, 'topic':topic})
+		topic = request.POST.get("roomtopic")
+		return render(request, "chatroom/test.html", {"id":n, "topic":topic})
 	return render(request, "chatroom/test.html", {"id":n})
 
 
@@ -17,14 +17,17 @@ def chat(request, n=1):
 	
 	try:
 		room = Room.objects.get(id=n)
-		chats = Chats.objects.filter(room=room).order_by('said_time')
-		return render(requets, "chatroom/chat.html", {'id':n, 'topic':room.topic, 'chats':chats})
+		chats = Chats.objects.filter(room=room).order_by("said_time")
+		return render(requets, "chatroom/chat.html", {"id":n, "topic":room.topic, "chats":chats})
 	except:
 		raise Http404("no such room")
 	
 def rooms(request): #index room page
+	if not request.session.get("is_login", None):
+		warning = "Please login first!"
+		return render(request, "chatroom/rooms.html", locals())
 	if request.method == "POST":
-		topic = request.POST.get('roomtopic')
+		topic = request.POST.get("roomtopic")
 		try:
 			room = Room.objects.get(topic=topic)
 			room.members += 1
@@ -33,4 +36,5 @@ def rooms(request): #index room page
 		except:
 			room = Room.objects.create(topic=topic, members=1)
 			return HttpResponseRedirect(reverse("chatroom:chat", args=(room.id,)))
+	rooms = Room.objects.all().order_by("ct_time")
 	return render(request, "chatroom/rooms.html")

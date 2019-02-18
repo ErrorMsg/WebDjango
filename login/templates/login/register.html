@@ -11,5 +11,36 @@
 {% endblock %}-->
 
 {% block content %}
-
+	<div class="container">
+		<div class="col-sm-4 col-sm-offset-4">
+			<form class="form-register" action="{% url 'login:register' %}" method="post">
+			{% if warning %}
+				<div class="alert alert-warning">{{ warning }}</div>
+			{% endif %}
+			{% csrf_token %}
+				<div class="form-group">
+					{{ register_form.username.label_tag }}
+					{{ register_form.username }}
+				</div>
+				<div class="form-group">
+					{{ register_form.password1.label_tag }}
+					{{ register_form.password1 }}
+				</div>
+				<div class="form-group">
+					{{ register_form.password2.label_tag }}
+					{{ register_form.password2 }}
+				</div>
+				<div class="form-group">
+					{{ register_form.email.label_tag }}
+					{{ register_form.email }}
+				</div>
+				<div class="form-group">
+					{{ register_form.sex.label_tag }}
+					{{ register_form.sex }}
+				</div>
+				<button type="reset" class="btn btn-default pull-left">Clear</button>
+				<button type="submit" class="btn btn-default pull-right">Register</button>
+			</form>
+		</div>
+	</div>
 {% endblock %}

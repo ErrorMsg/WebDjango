@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from users.models import UserInfo
+from chatroom.models import Room
 from .forms import UserForm, RegisterForm, AuthForm, ResetForm
 import hashlib
 
@@ -105,6 +106,9 @@ def register(request):
 def logout(request):
 	if not request.session.get("is_login", None):
 		return redirect("login:index")
+	username = request.session.user_name
+	rooms = Room.objects.filter(user=username)
+	
 	request.session.flush()
 	return redirect("login:index")
 
@@ -135,6 +139,18 @@ def reset(request):
 			password1 = reset_form.cleaned_data["password1"]
 			password2 = reset_form.cleaned_data["password2"]
 			user = UserInfo.objects.get(name=request.session.user_name)
+			if not request.session.get("is_login", None):
+				if password1 == user.pw:
+					warning = "New password same as current password!"
+					return render(request, "login/reset.html", locals())
+				elif password1 != password2:
+					warning = "New password doesn't match!"
+					return render(request, "login/reset.html", locals())
+				else:
+					user.pw = password1
+					user.save()
+					warning = "Password changed successfully!"
+					return render(request, "login/reset.html", locals())
 			if password0 == user.pw:
 				if password0 == password1:
 					warning = "New password same as current password!"

@@ -20,7 +20,7 @@ class AuthForm(forms.Form):
 	email = forms.EmailField(label="E-mail", widget=forms.EmailInput(attrs={"class":"form-control"}))
 	
 class ResetForm(forms.Form):
-	password0 = forms.CharField(label="Current password", max_length=256, widget=forms.PasswordInput(attrs={"class":"form-control"}))
+	password0 = forms.CharField(label="Current password", max_length=256, widget=forms.PasswordInput(attrs={"class":"form-control", "placeholder":"If you authenticated, please fill any words"}))
 	password1 = forms.CharField(label="New password", max_length=256, widget=forms.PasswordInput(attrs={"class":"form-control"}))
 	password2 = forms.CharField(label="Confirm new password", max_length=256, widget=forms.PasswordInput(attrs={"class":"form-control"}))
 	

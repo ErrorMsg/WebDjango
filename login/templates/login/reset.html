@@ -2,6 +2,8 @@
 
 {% block title %}index{% endblock %}
 
+{% block header %}Reset your password{% endblock %}
+
 <!--
 	<div class="container">
 		{% if request.session.is_login %}
@@ -74,7 +76,6 @@
 					<div class="alert alert-warning">{{ warning }}</div>
 				{% endif %}
 				{% csrf_token %}
-					<h2 class="text-center">Change your password</h2>
 					<div class="form-group">
 						{{ reset_form.password0.label_tag }}
 						{{ reset_form.password0 }}
@@ -98,7 +99,6 @@
 					<div class="alert alert-warning">{{ warning }}</div>
 				{% endif %}
 				{% csrf_token %}
-					<h2 class="text-center">Authenticate yourself</h2>
 					<div class="form-group">
 						{{ auth_form.username.label_tag }}
 						{{ auth_form.username }}

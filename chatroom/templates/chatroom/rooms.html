@@ -50,6 +50,9 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-8 col-sm-offset-2">
+			{% if warning %}
+				<div class="alert alert-warning">{{ warning }}</div>
+			{% endif %}
 				<ul class="list-group">
 				{% for room in rooms %}
 					<li class="list-group-item">
