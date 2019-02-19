@@ -154,7 +154,7 @@ class BasicCard(Card):
 
 # EquipCard
 class EquipCard(Card):
-    special = models.CharField(max_length=20, choices=wisdom_choices, default='immed')
+    special = models.CharField(max_length=20, choices=equip_choices, default='weapon')
     point = models.CharField(max_length=5)
     pattern = models.CharField(max_length=10, choices=pattern_choices)
     color = 'red' if pattern == 'heart' or pattern == 'diamond' else 'black'
