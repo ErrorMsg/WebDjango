@@ -108,7 +108,9 @@ def logout(request):
 		return redirect("login:index")
 	username = request.session.user_name
 	rooms = Room.objects.filter(user=username)
-	
+	for room in rooms:
+		room.member -= 1
+		rooms.save()
 	request.session.flush()
 	return redirect("login:index")
 

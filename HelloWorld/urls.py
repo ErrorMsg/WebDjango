@@ -20,7 +20,7 @@ from django.conf.urls import url
 from . import view
 
 urlpatterns = [
-    path("private/manage", admin.site.urls),
+    path("private/manage/", admin.site.urls),
 	#ld/dj15
 	url(r'^$', view.hello),
 	path("index/", view.index),

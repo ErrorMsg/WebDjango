@@ -24,3 +24,21 @@ class Chats(models.Model):
 		
 	class Meta:
 		ordering = ["said_time"]
+				
+
+class SyncRoom(models.Model):
+	name = models.CharField(max_length=64, unique=True)
+	label = models.SlugField(unique=True)
+				
+				
+class Message(models.Model):
+	room = models.ForeignKey(SyncRoom, related_name='messages', on_delete=models.CASCADE)
+	handle = models.TextField()
+	message = models.TextField()
+	timestamp = models.DateTimeField(auto_now_add=True, db_index=True)
+	
+	def __str__(self):
+		return self.message[:50]
+		
+	class Meta:
+		ordering = ["timestamp"]
