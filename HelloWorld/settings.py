@@ -57,6 +57,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+#MIDDLEWARE_CLASSES=dwebsocket.middleware.WebSocketMiddleware
+#to allow each view use websockets
+WEBSOCKET_ACCEPT_ALL=True 
+
 ROOT_URLCONF = 'HelloWorld.urls'
 
 TEMPLATES = [

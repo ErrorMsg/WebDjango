@@ -1,0 +1,110 @@
+<script>
+	jQuery("#send").on("click", function(){
+		var msg = jQuery("#text-message").val();
+		msg = msg.replace(/(^\s*)|(\s$)/g, "")
+		if (msg){
+			if (websocket == null){
+				websocket = get_websocket();
+			}
+			if (websocket.readyState == WebSocket.OPEN){
+				jQuery("#text-message").val("");
+				websocket.send(JSON.stringify({"type":"msg", "msg":msg}));
+			}
+		}
+	});
+</script>
+
+<!--<script type="text/javascript">
+	var websocket = null;
+	var get_websocket = function(){
+		//if ("WebSocket" in window) {
+			//ws = new WebSocket("ws://" + window.location.host + "/c/msg/");
+		//} else if ("MozWebSocket" in window) {
+			//ws = new MozWebSocket("ws://" + window.location.host + "/c/msg/");
+		//}
+		var ws = new WebSocket("ws://" + window.location.host + "/c/msg/");
+		ws.onerror = function(){
+			//console.log();
+			websocket = null;
+		};
+		ws.onopen = function(){
+			ws.send(JSON.stringify({"type":"online"}));
+		};
+		ws.onmessage = function(e){
+		//decode json data if received message from server
+			try{
+				var json = jQuery.parseJSON(e.data);
+				if (json["code"] == 400){
+					alert("!Please login.");
+					window.location.replace("{% url 'login:login' %}");
+				}else if (json["code"] == 200){
+					switch(json["type"]){
+						case "online":
+							if (user !== json["user"]["pk"]){
+								msg = "User" + HtmlEncode(json["user"]) + "is online.";
+								msg = '<dt class="text-left">' + msg + '</dt>';
+								//var d = jQuery(".chat-discussion");
+								jQuery(".chat-discussion").prepend(msg);
+								//var panel = jQuery(".chat-discussion");
+								//panel.append(msg);
+								//panel.scrollTop(panel[0].scrollHeight)
+								//toastr.clear();
+								//toastr["success"]("user" + HtmlEncode(json["user"]) + "online");
+							}
+							break;
+						case "offline":
+							if (user !== json["user"]["pk"]){
+								msg = "User" + HtmlEncode(json["user"]) + "is offline.";
+								msg = '<dt class="text-left">' + msg + '</dt>';
+								//var d = jQuery(".chat-discussion");
+								jQuery(".chat-discussion").prepend(msg);
+								//var panel = jQuery(".chat-discussion");
+								//panel.append(msg);
+								//panel.scrollTop(panel[0].scrollHeight)
+								//toastr.clear();
+								//toastr["warning"]("user" + HtmlEncode(json["user"]) + "offline");
+							}
+							break;
+						case "msg":
+							if (user !== json["user"]["pk"]){
+								dt_msg = '<dt class="text-left">' + HtmlEncode(json["user"]) + "   " + HtmlEncode(json["said_time"]) + '</dt>';
+								dd_msg = '<dd class="text-left">' + HtmlEncode(json["msg"]) + '</dd>';
+							}else{
+								dt_msg = '<dt class="text-right">' + HtmlEncode(json["user"]) + "   " + HtmlEncode(json["said_time"]) + '</dt>';
+								dd_msg = '<dd class="text-right">' + HtmlEncode(json["msg"]) + '</dd>';
+							}
+							msg = dt_msg + dd_msg
+							//var d = jQuery(".chat-discussion");
+							jQuery(".chat-discussion").prepend(msg);
+							//msg = msg.replace(/#user#/g, HtmlEncode(json["user"]["email"]));
+							//msg = msg.replace(/#pk#/g, json["user"]["pk"]);
+							//msg = msg.replace(/#date#/g, HtmlEncode(json["date"]));
+							//msg = msg.replace(/#msg#/g, HtmlEncode(json["msg"]));
+							//var panel = jQuery(".chat-discussion");
+							//panel.append(msg);
+							//panel.scrollTop(panel[0].scrollHeight);
+							break;
+						case "user":
+							var panel = jQuery(".users-list");
+							var contents = [];
+							jQuery.each(json["msg"], function(k, v){
+								msg = v["email"] + v["online"]
+								contents.push(msg);
+							});
+							panel.html(contents.join(""));
+							break;
+						default:
+							break;
+					}
+				}
+			} catch(e){
+				console.log(e);
+			}
+		};
+		ws.onclose = function(){
+			//console.log();
+			websocket = null;
+		};
+		return ws;
+	}
+</script>-->
