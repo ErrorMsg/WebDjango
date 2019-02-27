@@ -29,7 +29,7 @@ def chat(request, n=1):
 		# return render(request, "chatroom/chat.html", {"id":n, "topic":room.topic, "chats":chats})
 	try:
 		room = Room.objects.get(id=n)
-		print("room: " + room)
+		#print("room: " + room)
 		chats = Chats.objects.filter(room=room).order_by("-said_time")
 		#return render(request, "chatroom/chat.html", {"id":n, "topic":room.topic, "chats":chats})
 		return render(request, "chatroom/chat.html", {"id":n, "topic":room.topic})
@@ -115,8 +115,7 @@ def post(request):
 			id = int(request.POST.get("room_id"))
 			room = Room.objects.get(id=id)
 			chats = Chats.objects.filter(room=room, id__gt=last_chat).order_by("said_time")
-			data = serializers.serialize("json", chats)
-			print(chats[0].user)
+			data = serializers.serialize("json", chats, use_natural_foreign_keys=True)
 			return HttpResponse(data)
 			#return HttpResponse(json.dumps(data), content_type="application/json")
 	else:

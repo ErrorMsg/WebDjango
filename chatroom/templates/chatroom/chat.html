@@ -1,23 +1,20 @@
+{% extends 'login/cb.html' %}
+
 {% load staticfiles %}
-<!DOCTYPE html>
-<html lang="zh-CN">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Title{% endblock %}</title>
-    <link href="{% static 'login/bootstrap-3.3.7-dist/css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static 'login/css/main.css' %}" rel="stylesheet">
-    {% block css %}{% endblock %}
-</head>
-
-<div>
-	<script src="{% static 'login/js/jquery-3.3.1.js' %}"></script>
-    <script src="{% static 'login/bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'login/js/constant.js' %}"></script>
+{% block header %}
+<div class="row">
+    <div class="col-sm-4 col-sm-offset-4">
+			{% if topic %}
+				<h1><span style="color:#6E6E6E">Chatroom: </span><b>#{{ topic }}</b></h1>
+			{% else %}
+				<h1><span style="color:#6E6E6E">Chatroom: </span><b>#Room{{ id }}</b></h1>
+			{% endif %}
+    </div>
 </div>
+{% endblock %}
 
+{% block content %}
 <script type="text/javascript">
 $(function(){
 	updateMsg();
@@ -40,115 +37,84 @@ $(function(){
 })
 </script>
 <script type="text/javascript">
-function updateMsg(){
-	last_id = $(".chat_list").last().val();
-	if (last_id){
-	}else{
-		last_id = "0";
-	}
-	$.post(
-		"{% url 'chatroom:post' %}",{
-			post_type:"get",
-			room_id: {{ id }},
-			last_chat: last_id,
-		},
-		function(data){
-			obj = JSON.parse(data);
-			for (var i=0;i<obj.length;i++){
-				chat = obj[i];
-				id = chat["pk"];
-				user = chat["fields"]["user"];
-				//ct = chat["fields"]["said_time"];
-				var st = new Date(chat["fields"]["said_time"]);
-				ct = st.toLocaleString();
-				said = chat["fields"]["said"];
-				$(".chat-discussion").append("<hr />")
-				$(".chat-discussion").append("<dt class='text-left'>" + user + "-" + ct + "</dt>");
-				$(".chat-discussion").append("<dd class='text-left'>" + said + "</dd>");
-				$(".chat-discussion").append("<input type='hidden' class='chat_list' value='" + id + "'>");
-			}
-		}
-	);
-}
-//setInterval("updateMsg()", 5000);
-</script>
+    function updateMsg(){
+	    last_id = $(".chat_list").last().val();
+	    if (last_id){
+	    }else{
+		    last_id = "0";
+	    }
+	    $.post(
+		    "{% url 'chatroom:post' %}",{
+			    post_type:"get",
+			    room_id: {{ id }},
+			    last_chat: last_id,
+		    },
+		    function(data){
+			    obj = JSON.parse(data);
+			    for (var i=0;i<obj.length;i++){
+				    chat = obj[i];
+				    id = chat["pk"];
+				    user = chat["fields"]["user"];
+				    //ct = chat["fields"]["said_time"];
+				    var st = new Date(chat["fields"]["said_time"]);
+				    ct = st.toLocaleString();
+				    said = chat["fields"]["said"];
+				    $(".chat-discussion").append("<hr />")
+				    $(".chat-discussion").append("<dt class='text-left'>" + user + "-" + ct + "</dt>");
+				    $(".chat-discussion").append("<dd class='text-left'>" + said + "</dd>");
+				    $(".chat-discussion").append("<input type='hidden' class='chat_list' value='" + id + "'>");
+			    }
+		    }
+	    );
+    }
+    setInterval(updateMsg, 1000);
+    </script>
 
-<head>
-	<div class="container">
-		<div class="row">
-			<div class="col-sm-6">
-				<div class="contactinfo">
-					<ul class="nav nav-pills">
-						<li><a href="#">Thanks for join chatroom {{ id }}</a></li>
-					</ul>
+<div class="container">
+	<div class="row">
+		<div class="col-sm-8 col-sm-offset-2">
+			<form id="messageForm" action="." method="post">
+			{% csrf_token %}
+				<div class="input-group">
+					<input type="text" name="message" id="content" class="form-control" autofocus="autofocus">
+					<input type="hidden" name="post_type" value="send">
+					<input type="hidden" name="room_id" value="{{ id }}">
+					<span class="input-group-btn">
+						<button type="submit" id="send" class="btn btn-default">send</button>
+					</span>
 				</div>
-			</div>
-			<div class="col-sm-6">
-				<div class="menu pull-right">
-					<ul class="nav nav-pills">
-						<li><a href="#">name</a></li>
-						<li><a href="#">logoff</a></li>
-					</ul>
-				</div>
-			</div>
+			</form>
 		</div>
-		<div class="row">
-			<div class="col-sm-4 col-sm-offset-4">
-			{% if topic %}
-				<h1>#{{ topic }}</h1>
-			{% else %}
-				<h1>#Room{{ id }}</h1>
-			{% endif %}
-			</div>
-		</div>
-	</div>
-</head>
-<hr />
-<body onLoad="get_websocket();">
-	<div class="container">
-		<div class="row">
-			<div class="col-sm-8 col-sm-offset-2">
-				<form id="messageForm" action="." method="post">
-				{% csrf_token %}
-					<div class="input-group">
-						<input type="text" name="message" id="content" class="form-control" autofocus="autofocus">
-						<input type="hidden" name="post_type" value="send">
-						<input type="hidden" name="room_id" value="{{ id }}">
-						<span class="input-group-btn">
-							<button type="submit" id="send" class="btn btn-default">send</button>
-						</span>
-					</div>
-				</form>
-			</div>	
-			<br></br>
-			{% if chats %}
-			<div class="col-sm-6 col-sm-offset-3">
-				<dl class="chat-discussion">
-					{% for chat in chats %}
-						<!--<hr />
-						{% if forloop.counter|divisibleby:"2" %}
-							<dt class="text-right">{{ chat.user.name }}   {{ chat.said_time }}</dt>
-							<dd class="text-right">{{ chat.said }}</dd>
-						{% else %}
-							<dt class="text-left">{{ chat.user.name }}   {{ chat.said_time }}</dt>
-							<dd class="text-left">{{ chat.said }}</dd>
-						{% endif %}-->
-						<hr />
+		<br />
+		{% if chats %}
+		<div class="col-sm-6 col-sm-offset-3">
+			<dl class="chat-discussion">
+				{% for chat in chats %}
+					<!--<hr />
+					{% if forloop.counter|divisibleby:"2" %}
+						<dt class="text-right">{{ chat.user.name }}   {{ chat.said_time }}</dt>
+						<dd class="text-right">{{ chat.said }}</dd>
+					{% else %}
 						<dt class="text-left">{{ chat.user.name }}   {{ chat.said_time }}</dt>
 						<dd class="text-left">{{ chat.said }}</dd>
-						<input type="hidden" class="chat_list" value="{{ chat.id }}">
-					{% endfor %}
-				</dl>
-			</div>
-			{% else %}
-			<div class="col-sm-8 col-sm-offset-2">
-				<dl class="chat-discussion">
-					<dt class="text-left">Here is room: {{ id }}</dt>
-					<dd class="text-left">Start your chat now.</dd>
-				</dl>
-			</div>
-			{% endif %}
-			<input type="hidden" class="test" value="123">
+					{% endif %}-->
+					<hr />
+					<dt class="text-left">{{ chat.user.name }}   {{ chat.said_time }}</dt>
+					<dd class="text-left">{{ chat.said }}</dd>
+					<input type="hidden" class="chat_list" value="{{ chat.id }}">
+				{% endfor %}
+			</dl>
 		</div>
+		{% else %}
+		<div class="col-sm-8 col-sm-offset-2">
+			<dl class="chat-discussion">
+				<dt class="text-left">Here is room: {{ id }}</dt>
+				<dd class="text-left">Start your chat now.</dd>
+			</dl>
+		</div>
+		{% endif %}
+		<input type="hidden" class="test" value="123">
 	</div>
-</body>
+</div>
+
+{% endblock %}
