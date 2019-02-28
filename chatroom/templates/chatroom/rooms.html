@@ -2,31 +2,39 @@
 
 {% load staticfiles %}
 
+{% block css %}
+<link href="{% static 'chatroom/css/main.css' %}" ref="stylesheet">
+{% endblock %}
+
 {% block header %}
 <div class="row">
     <div class="col-sm-4 col-sm-offset-4">
-			<h1 align="center">Join now!</h1>
+			<h1 align="center">Join now !</h1>
     </div>
 </div>
 {% endblock %}
 
 {% block content %}
+<script type="text/javascript">
+	function updateRooms(){
+		$.post("{% url 'chatroom:post' %}",{post_type:"rooms"},function(data){
+			obj = JSON.parse(data);
+			for (i=0;i<obj.length;i++){
+				room = obj[i];
+				topic = room["topic"];
+				members = room["members"];
+				msgs = room["msgs"];
+			}
+		});
+	}
+	setInterval(updateRooms, 5000);
+</script>
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-8 col-sm-offset-2">
 			{% if warning %}
 				<div class="alert alert-warning">{{ warning }}</div>
 			{% endif %}
-				<ul class="list-group">
-				{% for room in rooms %}
-					<li class="list-group-item">
-						<span class="badge">{{ room.members }}</span>
-						{{ room.topic }}
-						<button type="button" class="btn btn-default">Join</button>
-					</li>
-				{% endfor %}
-				</ul>
-				
 				<form class="room-form" action="{% url 'chatroom:rooms' %}" method="post">
 				{% csrf_token %}
 					<div class="input-group">
@@ -36,6 +44,15 @@
 						</span>
 					</div>
 				</form>
+				<hr />
+				<ul class="list-group">
+				{% for room in rooms %}
+					<li class="list-group-item">
+						<span>{{ room.topic }}&emsp;<span class="badge">{{ room.members }}</span></span>
+						<button type="button" class="btn btn-default btn-sm pull-right" onclick="window.open('#')">Join Now</button>
+					</li>
+				{% endfor %}
+				</ul>
 			</div>
 		</div>
 	</div>

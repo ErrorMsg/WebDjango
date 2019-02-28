@@ -2,11 +2,15 @@
 
 {% load staticfiles %}
 
+{% block css%}
+<link href="{% static 'chatroom/css/main.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block header %}
 <div class="row">
     <div class="col-sm-4 col-sm-offset-4">
 			{% if topic %}
-				<h1><span style="color:#6E6E6E">Chatroom: </span><b>#{{ topic }}</b></h1>
+				<h1><span style="color:#6E6E6E">Chatroom #{{ id }}: </span><b>{{ topic }}</b></h1>
 			{% else %}
 				<h1><span style="color:#6E6E6E">Chatroom: </span><b>#Room{{ id }}</b></h1>
 			{% endif %}
@@ -35,10 +39,14 @@ $(function(){
 		return false;
 	});
 })
+window.addEventListener("beforeunload", function(e){
+	$.post("{% url 'chatroom:post' %}", {post_type:"leave", room_id:{{ id }},},function(data){});
+	return "leave chatroom?"
+})
 </script>
 <script type="text/javascript">
     function updateMsg(){
-	    last_id = $(".chat_list").last().val();
+	    last_id = $(".chat_list").first().val();
 	    if (last_id){
 	    }else{
 		    last_id = "0";
@@ -55,20 +63,33 @@ $(function(){
 				    chat = obj[i];
 				    id = chat["pk"];
 				    user = chat["fields"]["user"];
-				    //ct = chat["fields"]["said_time"];
 				    var st = new Date(chat["fields"]["said_time"]);
 				    ct = st.toLocaleString();
 				    said = chat["fields"]["said"];
-				    $(".chat-discussion").append("<hr />")
-				    $(".chat-discussion").append("<dt class='text-left'>" + user + "-" + ct + "</dt>");
-				    $(".chat-discussion").append("<dd class='text-left'>" + said + "</dd>");
-				    $(".chat-discussion").append("<input type='hidden' class='chat_list' value='" + id + "'>");
+					$(".chat-discussion").prepend("<dt class='text-left'>"+user+"-"+ct+"</dt>"+"<dd class='text-left'>"+said+"</dd>"+"<input type='hidden' class='chat_list' value='"+id+"'>"+"<hr />");
+				    //$(".chat-discussion").append("<hr />");
+				    //$(".chat-discussion").append("<dt class='text-left'>" + user + "-" + ct + "</dt>");
+				    //$(".chat-discussion").append("<dd class='text-left'>" + said + "</dd>");
+				    //$(".chat-discussion").append("<input type='hidden' class='chat_list' value='" + id + "'>");
 			    }
 		    }
 	    );
     }
     setInterval(updateMsg, 1000);
-    </script>
+</script>
+<script type="text/javascript">
+	//alert will show xxx, yes to quit, no to back
+	//window.onbeforeunload = function(){
+		//return "xxx";
+	//}
+	window.onbeforeunload = function(){
+		var n = window.event.screenX - window.screenLeft;
+		var b = n > document.documentElement.scrollWidth - 20;
+		if (!(b && window.event.clientY < 0 || window.event.altKey)){
+			leaveChat();
+		}
+	}
+</script>
 
 <div class="container">
 	<div class="row">
@@ -89,7 +110,7 @@ $(function(){
 		{% if chats %}
 		<div class="col-sm-6 col-sm-offset-3">
 			<dl class="chat-discussion">
-				{% for chat in chats %}
+				{% for chat in chats reversed %}
 					<!--<hr />
 					{% if forloop.counter|divisibleby:"2" %}
 						<dt class="text-right">{{ chat.user.name }}   {{ chat.said_time }}</dt>
@@ -108,7 +129,7 @@ $(function(){
 		{% else %}
 		<div class="col-sm-8 col-sm-offset-2">
 			<dl class="chat-discussion">
-				<dt class="text-left">Here is room: {{ id }}</dt>
+				<!--<dt class="text-left">Here is room: {{ id }}</dt>-->
 				<dd class="text-left">Start your chat now.</dd>
 			</dl>
 		</div>

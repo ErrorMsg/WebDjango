@@ -58,6 +58,7 @@ def login(request):
 					request.session["user_id"] = user.id
 					request.session["user_name"] = user.name
 					request.session["tried_times"] += 1
+					request.session["chat_rooms"] = []
 					return redirect("login:index")
 				else:
 					warning = "Incorrect password!"
@@ -106,11 +107,15 @@ def register(request):
 def logout(request):
 	if not request.session.get("is_login", None):
 		return redirect("login:index")
-	username = request.session.user_name
-	rooms = Room.objects.filter(user=username)
-	for room in rooms:
-		room.member -= 1
-		rooms.save()
+	rids = request.session.get("chat_rooms", None)
+	if rids:
+		for rid in rids:
+			room = Room.objects.get(pk=rid)
+			room.members -= 1
+			if room.members <= 0:
+				room.delete()
+			else:
+				rooms.save()
 	request.session.flush()
 	return redirect("login:index")
 
@@ -176,8 +181,8 @@ def test(request):
 	return render(request, "login/cb.html")
 
 def love(request):
-	sweet = "Love you, Micky"
-	return render(request, "login/love.html", locals())
+	sweet = "Love you, M!"
+	return render(request, "login/test.html", locals())
 	
 def card(request, id=1):
 	pass

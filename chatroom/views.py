@@ -6,6 +6,7 @@ from .models import Room, Chats, SyncRoom, Message
 from users.models import UserInfo
 from django.views.decorators.csrf import csrf_protect,csrf_exempt
 from dwebsocket.decorators import accept_websocket
+from django.forms.models import model_to_dict
 import json
 
 
@@ -51,6 +52,7 @@ def rooms(request): #index room page
 				room = Room.objects.get(pk=id)
 				room.members += 1
 				room.save()
+				request.session["chat_rooms"].append(room.id)
 				return HttpResponseRedirect(reverse("chatroom:chat", args=(id,)))
 			except:
 				warning = "Room number can't be found!"
@@ -59,12 +61,14 @@ def rooms(request): #index room page
 			room = Room.objects.get(topic=topic)
 			room.members += 1
 			room.save()
+			request.session["chat_rooms"].append(room.id)
 			return HttpResponseRedirect(reverse("chatroom:chat", args=(room.id,)))
 		except:
 			room = Room.objects.create(topic=topic, members=1)
+			request.session["chat_rooms"].append(room.id)
 			return HttpResponseRedirect(reverse("chatroom:chat", args=(room.id,)))
 	rooms = Room.objects.all().order_by("ct_time")
-	return render(request, "chatroom/rooms.html")
+	return render(request, "chatroom/rooms.html", locals())
 	
 	
 def chat_room(request, label):
@@ -117,6 +121,25 @@ def post(request):
 			chats = Chats.objects.filter(room=room, id__gt=last_chat).order_by("said_time")
 			data = serializers.serialize("json", chats, use_natural_foreign_keys=True)
 			return HttpResponse(data)
-			#return HttpResponse(json.dumps(data), content_type="application/json")
+			#return HttpResponse(json.dumps(chats), content_type="application/json")
+		elif post_type == "leave":
+			user = request.session.get("user_name", None)
+			id = int(request.POST.get("room_id"))
+			room = Room.objects.get(pk=id)
+			room.members -= 1
+			print("%s left, %d in room." %(user, room.members))
+			if room.members <= 0:
+				room.delete()
+			else:
+				room.save()
+			return HttpResponse()
+		elif post_type == "rooms":
+			rooms = Room.objects.all().order_by("ct_time")
+			l_rooms = []
+			for room in rooms:
+				d_room = model_to_dict(room)
+				d_room["msgs"] = len(room.chats_set.all())
+				l_rooms.append(d_room)
+			return HttpResponse(json.dumps(l_rooms)) 
 	else:
 		raise Http404

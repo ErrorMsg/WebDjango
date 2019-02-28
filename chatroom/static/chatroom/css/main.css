@@ -1,0 +1,21 @@
+/*************************
+*******Header CSS******
+**************************/
+
+.chat-discussion {
+	overflow: auto;
+	height: 400px;
+}
+
+.btn-container-alt {
+}
+
+.red-point::before{
+    content: " ";
+    border: 3px solid red;/*设置红色*/
+    border-radius:3px;/*设置圆角*/
+    position: absolute;
+    z-index: 1000;
+    right: 0;
+    margin-right: -8px;
+}
