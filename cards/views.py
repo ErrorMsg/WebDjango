@@ -1,7 +1,10 @@
 from django.shortcuts import render
+from django.http import Http404, HttpResponse
 from users.models import UserInfo
 from blogs.models import Blog, UserComments
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.decorators.csrf import csrf_exempt
+from django.core import serializers
 import datetime
 
 # Create your views here.
@@ -38,3 +41,21 @@ def card(request, id=1):
 				comments = paginator.page(paginator.num_pages)
 			return render(request, "cards/card.html", {'id':id, 'uc':comments})
 	return render(request, "cards/card.html", {'id':id, 'uc':comments})
+
+@csrf_exempt
+def post(request):
+	if request.method == "POST":
+		post_type = request.POST.get("post_type")
+		if post_type == "send":
+			pass
+		elif post_type == "get":
+			pass
+		elif post_type == "page":
+			page = request.POST.get("page")*10
+			id = int(request.POST.get("card_id"))
+			blog = Blog.objects.get(pk=id)
+			comments = UserComments.objects.filter(blog=blog, id__gt=page).order_by("pub_time")
+			data = serializers.serialize("json", comments, user_natural_foreign_keys=True)
+			return HttpResponse(data)
+	else:
+		return Http404
