@@ -1,0 +1,12 @@
+<script type="text/javascript">
+function t(){
+	a = document.getElementById("page_2").value();
+	alert(a);
+}
+t()
+</script>
+<body>
+{% for p in pages %}
+	<p id="page_"+"{{ p }}">{{ p|add:"2" }}</p>
+{% endfor %}
+</body>

@@ -17,6 +17,6 @@ def hello(request):
 
 
 def index(request):
-    # return HttpResponse("this is index")
-    context = {"info": "please enter first: "}
-    return render(request, 'index.html', context)
+    return render(request, "login/index.html")
+    #context = {"info": "please enter first: "}
+    #return render(request, 'index.html', context)

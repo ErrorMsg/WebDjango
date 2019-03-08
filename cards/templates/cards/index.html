@@ -1,0 +1,62 @@
+{% extends "login/cb.html" %}
+{% load staticfiles %}
+
+{% block header %}Cards List{% endblock %}
+
+{% block content %}
+<h1></h1>
+<div class="container">
+<div class="row">
+<div class="col-sm-6">
+{% if nocards %}
+	<p>no cards found.</p>
+{% else %}
+	{% if heros %}
+	<ul><b>HeroCards:</b>
+	{% for hero in heros %}
+		<li><a href='{% url "cards:card" hero.blog.id %}'>{{ hero }}</a></li>
+	{% endfor %}
+	</ul>
+	<hr />
+	{% endif %}
+	
+	{% if basics %}
+	<ul><b>BasicCards:</b>
+	{% for basic in basics %}
+		<li><a href="#">{{ basic }}</a></li>
+	{% endfor %}
+	</ul>
+	<hr />
+	{% endif %}
+	
+	{% if equips %}
+	<ul><b>EquipCards:</b>
+	{% for equip in equips %}
+		<li><a href="#">{{ equip }}</a></li>
+	{% endfor %}
+	</ul>
+	<hr />
+	{% endif %}
+	
+	{% if wisdoms %}
+	<ul><b>WisdomCards:</b>
+	{% for wisdom in wisdoms %}
+		<li><a href="#">{{ wisdom }}</a></li>
+	{% endfor %}
+	</ul>
+	<hr />
+	{% endif %}
+	
+	{% if bads %}
+	<ul><b>BadCards:</b>
+	{% for bad in bads %}
+		<li><a href="#">{{ bad }}</a></li>
+	{% endfor %}
+	</ul>
+	<hr />
+	{% endif %}
+{% endif %}
+</div>
+</div>
+</div>
+{% endblock %}

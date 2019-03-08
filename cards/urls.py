@@ -5,5 +5,7 @@ app_name = "cards"
 
 urlpatterns = [
 	path("test/", views.test, name="test"),
-	path("card/", views.card, name="card"),
+	path("index/", views.index, name="index"),
+	path("card/<int:id>", views.card, name="card"),
+	path("post/", views.post, name="post"),
 ]
