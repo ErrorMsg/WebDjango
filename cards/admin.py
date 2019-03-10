@@ -17,7 +17,7 @@ class PowerWisdomInline(admin.TabularInline):
 class WisdomCardAdmin(admin.ModelAdmin):
 	fieldsets = (
 		('general info', {
-			'fields': ('name', 'pic')
+			'fields': ('name', 'pid', 'blog')
 		}),
 		('type info', {
 			'fields': ('pattern', 'point', 'effect')
@@ -44,7 +44,7 @@ class HorseEquipInline(admin.TabularInline):
 class EquipCardAdmin(admin.ModelAdmin):
 	fieldsets = (
 		('general info', {
-			'fields': ('name', 'pic')
+			'fields': ('name', 'pid', 'blog')
 		}),
 		('type info', {
 			'fields': ('pattern', 'point', 'effect')

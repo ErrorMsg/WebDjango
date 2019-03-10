@@ -23,7 +23,7 @@
 	{% if basics %}
 	<ul><b>BasicCards:</b>
 	{% for basic in basics %}
-		<li><a href="#">{{ basic }}</a></li>
+		<li><a href='{% url "cards:card" basic.blog.id %}'>{{ basic }}</a></li>
 	{% endfor %}
 	</ul>
 	<hr />
@@ -32,7 +32,7 @@
 	{% if equips %}
 	<ul><b>EquipCards:</b>
 	{% for equip in equips %}
-		<li><a href="#">{{ equip }}</a></li>
+		<li><a href='{% url "cards:card" equip.blog.id %}'>{{ equip }}</a></li>
 	{% endfor %}
 	</ul>
 	<hr />
@@ -41,7 +41,7 @@
 	{% if wisdoms %}
 	<ul><b>WisdomCards:</b>
 	{% for wisdom in wisdoms %}
-		<li><a href="#">{{ wisdom }}</a></li>
+		<li><a href='{% url "cards:card" wisdom.blog.id %}'>{{ wisdom }}</a></li>
 	{% endfor %}
 	</ul>
 	<hr />
@@ -50,7 +50,7 @@
 	{% if bads %}
 	<ul><b>BadCards:</b>
 	{% for bad in bads %}
-		<li><a href="#">{{ bad }}</a></li>
+		<li><a href='{% url "cards:card" bad.blog.id %}'>{{ bad }}</a></li>
 	{% endfor %}
 	</ul>
 	<hr />

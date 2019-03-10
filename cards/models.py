@@ -94,7 +94,7 @@ class Card(models.Model):
 	name = models.CharField(max_length=30)
 	#pic = models.ImageField()
 	pid = models.IntegerField()
-	blog = models.ForeignKey("blogs.Blog", on_delete=models.CASCADE)
+	blog = models.ForeignKey("blogs.CardBlog", on_delete=models.CASCADE)
 	#pub_date = models.DateTimeField('date published', auto_now_add=True)
 
 	class Meta:
@@ -143,7 +143,7 @@ class BasicCard(Card):
 	kind = 'basiccard'
 
 	def __str__(self):
-		return self.special + self.name
+		return self.name
 
 	def short_description(self):
 		return "%s:%s\n%s:%s\n%s:%s\n" % (
@@ -321,7 +321,7 @@ class BadCard(Card):
 	kind = 'badcard'
 
 	def __str__(self):
-		return self.name + ' ' + self.speical
+		return self.name + ' ' + self.special
 
 	def short_description(self):
 		return "%s:%s\n" % (

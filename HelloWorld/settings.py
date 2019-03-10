@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     "login",
 	"polls",
 	"users",
-	
+
+	"ckeditor",
 ]
 
 MIDDLEWARE = [
