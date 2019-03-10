@@ -22,7 +22,7 @@ from . import view
 urlpatterns = [
     path("private/manage/", admin.site.urls),
 	#ld/dj15
-	url(r'^$', view.hello),
+	url(r'^$', view.index),
 	path("index/", view.index),
 	path("c/", include('chatroom.urls')),
 	path("k/", include('cards.urls')),

@@ -92,8 +92,10 @@ wisdom_choices = (
 # Card
 class Card(models.Model):
 	name = models.CharField(max_length=30)
-	pic = models.ImageField()
-	pub_date = models.DateTimeField('date published', auto_now_add=True)
+	#pic = models.ImageField()
+	pid = models.IntegerField()
+	blog = models.ForeignKey("blogs.Blog", on_delete=models.CASCADE)
+	#pub_date = models.DateTimeField('date published', auto_now_add=True)
 
 	class Meta:
 		abstract = True

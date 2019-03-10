@@ -1,9 +1,15 @@
 from django.db import models
 
+blog_choices = (
+	("article", "article"),
+	("card", "card"),
+)
+
 # Create your models here.
 class Blog(models.Model):
 	topic = models.CharField(max_length=64, unique=True)
 	ct_time = models.DateTimeField(auto_now_add=True)
+	type = models.CharField(max_length=10, choices=blog_choices)
 	
 	def __str__(self):
 		return self.topic
