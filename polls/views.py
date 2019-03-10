@@ -4,6 +4,7 @@ from .models import Question, Choice
 from django.template import loader
 from django.urls import reverse
 
+display_code = ""
 
 # Create your views here.
 def poll(request):
@@ -75,7 +76,11 @@ def test(request, p):
 	return HttpResponse("test path is: %s" % p)
 
 def test2(request):
-	return render(request, "polls/test.html")
+	global display_code
+	if request.method == "POST":
+		display_code = request.POST.get("code")
+		return render(request, "polls/test.html", {"display":display_code})
+	return render(request, "polls/test.html", {"display":display_code})
 	
 from dwebsocket.decorators import accept_websocket, require_websocket	
 @accept_websocket
