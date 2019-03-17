@@ -3,9 +3,9 @@
 
 {% block presentation %}
 <li role="presentation"><a href="{% url 'login:index' %}">主页</a></li>
-<li role="presentation"><a href="{% url 'login:login' %}">日志</a></li>
+<li role="presentation active"><a href="{% url 'login:login' %}">日志</a></li>
 <li role="presentation"><a href="{% url 'chatroom:rooms' %}">谈谈</a></li>
-<li role="presentation" class="dropdown active">
+<li role="presentation" class="dropdown">
     <a id="menu-select" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
 	三国杀 <span class="caret"></span>
 	</a>
@@ -16,13 +16,6 @@
 </li>
 {% endblock %}
 
-{% block header %}
-{% if card %}
-	{{ card.kind }}:{{ card.name }}
-{% else %}
-	锦囊牌：将计就计
-{% endif %}
-{% endblock %}
 
 {% block content %}
 <script type="text/javascript">
@@ -30,7 +23,7 @@ $(function(){
     $("#comment-form").submit(function(){
 		alert($("#comment-form").serialize());
         $.post(
-        "{% url 'cards:post' %}",
+        "{% url 'blogs:post' %}",
         $("#comment-form").serialize(),
         function(data){
             $("#comment").val("");
@@ -66,9 +59,9 @@ var toPage = function (p){
     }
     p = p+1
     $.post(
-        "{% url 'cards:post' %}",{
+        "{% url 'blogs:post' %}",{
             post_type:"page", 
-            card_id:{{ id }},
+            article_id:{{ id }},
             page:p,
         },
         function(data){
@@ -122,51 +115,12 @@ toPage(0);
 					</div>
 				</div>
 				<div class="col-sm-7 pull-left">
-				{% if card %}
-				<h2>{{ card.name }}</h2>
-				{% endif %}
-				{% if card.kind == "herocard" %}
-					<p>类型：武将牌</p>
-					<p>称号:{{ card.nickname }}</p>
-					<p>势力:{{ card.country }}</p>
-					<p>勾玉:{{ card.hp }}</p>
-					<p>技能:{{ card.skill }}</p>
-					{% if card.united %}
-						<p>珠联璧合:{{ card.united }}</p>
-					{% endif %}
-				{% elif card.kind == "basiccard" %}
-					<p>类型：基本牌</p>
-					<p>{{ card.point }}, {{ card.pattern }}</p>
-					<p>效果:{{ card.effect }}</p>
-				{% elif card.kind == "equipcard" %}
-					<p>类型：装备牌</p>
-					{% if card.special %}
-						<p>特殊类型:{{ card.special }}</p>
-					{% endif %}
-					<p>{{ card.point }}, {{ card.pattern }}</p>
-					{% if card.length %}
-						<p>距离:{{ card.length }}</p>
-					{% endif %}
-					<p>效果:{{ card.effect }}</p>
-				{% elif card.kind == "wisdomcard" %}
-					<p>类型：锦囊牌</p>
-					{% if card.special %}
-						<p>特殊类型:{{ card.special }}</p>
-					{% endif %}
-					<p>{{ card.point }}, {{ card.pattern }}</p>
-					<p>效果:{{ card.effect }}</p>
-				{% elif card.kind == "badcard" %}
-					<p>类型：灾祸牌</p>
-					{% if card.special %}
-						<p>特殊类型:{{ card.special }}</p>
-					{% endif %}
-					<p>效果:{{ card.effect }}</p>
-				{% else %}
-					<h2>将计就计</h2>
-					<p>类型：非延时锦囊/诡计</p>
-					<p>效果：其他角色在你的回合内发动伏击时，无效之。</p>
-					<p>伏击效果：对你使用，当前回合，每当你使用伏击区的牌时，摸一张牌。</p>
-					<!--<hr />-->
+				{% if article %}
+				<h2>{{ article.topic }}</h2>
+				<hr />
+				<div id="mbody">
+				{{ article.mbody }}
+				</div>
 				{% endif %}
 				</div>
 				<div class="col-sm-7 pull-right">
@@ -211,12 +165,6 @@ toPage(0);
 				</div>
 				<div class="col-sm-7 pull-left">
 					<dl class="comment-list" id="comment-list">
-						<dt class="text-left">AA</dt>
-						<dd class="text-left">aaa,aaa,aaa</dd>
-						<dt class="text-right">BB</dt>
-						<dd class="text-right">bbb,bbb,bbb</dd>
-						<!--<dt class="text-left">CC</dt>
-						<dd class="text-left">ccc,ccc,ccc</dd>-->
 						{% if uc %}
 							{% for c in uc %}
 								{% if forloop.counter0|divisibleby:"2" %}
@@ -230,6 +178,12 @@ toPage(0);
 							<!--<dt class="text-right">{{ uc.user.name }}</dt>
 							<dd class="text-right">{{ uc.entry }}</dd>-->
 						{% else %}
+							<dt class="text-left">AA</dt>
+							<dd class="text-left">aaa,aaa,aaa</dd>
+							<dt class="text-right">BB</dt>
+							<dd class="text-right">bbb,bbb,bbb</dd>
+							<!--<dt class="text-left">CC</dt>
+							<dd class="text-left">ccc,ccc,ccc</dd>-->
 							<dt class="text-center">----------</dt>
 						{% endif %}             
 					</dl>
@@ -241,9 +195,9 @@ toPage(0);
         <div class="col-sm-5">
             <nav aria-label="...">
                 <ul class="pager">
-                    <li><a href="{% url 'cards:card' card.blog.id|add:'-1' %}">prev</a></li>
+                    <li><a href="{% url 'blogs:article' article.id|add:'-1' %}">prev</a></li>
                     <li>{{ id }}</li>
-                    <li><a href="{% url 'cards:card' card.blog.id|add:'1' %}">next</a></li>
+                    <li><a href="{% url 'blogs:article' article.id|add:'1' %}">next</a></li>
                 </ul>
             </nav>
         </div>
@@ -254,7 +208,7 @@ toPage(0);
                 <div class="input-group">
                     <input type="text" name="comment" id="comment" class="form-control" placeholder="write a comment here">
                     <input type="hidden" name="post_type" value="send">
-                    <input type="hidden" name="card_id" value="{{ id }}">
+                    <input type="hidden" name="article_id" value="{{ id }}">
                     <span class="input-group-btn">
                         <button type="submit" class="btn btn-default">Comment</button>
                     </span>
